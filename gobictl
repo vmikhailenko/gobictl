@@ -1,0 +1,47 @@
+#!/bin/bash
+# Gobi 2000 start and stop commands
+CMD_GPS_PREFIX="\$GPS_"
+CMD_GPS_START="START"
+CMD_GPS_STOP="STOP"
+
+# Name of the device: by default Gobi 2000 will attach to ttyUSB* 
+# according to 60-gobi-loader.rules bundled with gobi_loader in Debian
+# Modified file will create symlink gobi[n] where [n] is device number
+# according to gobi 2000 layout GPS is always last one. So, hope it works 
+# even when there is another device in the system that linked to ttyUSB
+DEVICE="/dev/gobi2"
+if [ -n "$2" ] 
+	then DEVICE=$2
+fi
+
+function gps_command() {
+	COMMAND=$CMD_GPS_PREFIX$1
+	LDEVICE=$2
+	echo ${COMMAND} >> "${LDEVICE}"
+}
+function start_gpsd() {
+	gpsd $1
+}
+function stop_gpsd() {
+    killall gpsd
+} 
+
+case "$1" in
+start)
+  echo "Starting GPS wtih command ${CMD_GPS_START} on device ${DEVICE}" 
+  gps_command $CMD_GPS_START $DEVICE
+  start_gpsd $DEVICE
+;;
+
+stop)
+  echo "Stopping GPS wtih command ${CMD_GPS_STOP} on device ${DEVICE}" 
+  gps_command $CMD_GPS_STOP $DEVICE
+  stop_gpsd
+;;
+
+restart)
+$0 stop
+$0 start
+;;
+esac
+exit 0
