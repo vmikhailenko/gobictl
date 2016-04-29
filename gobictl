@@ -9,7 +9,10 @@ CMD_GPS_STOP="STOP"
 # Modified file will create symlink gobi[n] where [n] is device number
 # according to gobi 2000 layout GPS is always last one. So, hope it works 
 # even when there is another device in the system that linked to ttyUSB
-DEVICE="/dev/gobi2"
+# Last gobi[n] device will be GPS
+DEVICE_ID=`ls /dev/ | grep gobi | tail -n 1`
+DEVICE="/dev/${DEVICE_ID}"
+
 if [ -n "$2" ] 
 	then DEVICE=$2
 fi
