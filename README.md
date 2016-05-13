@@ -6,7 +6,7 @@ Simple script to manage Qualcomm Gobi 2000 GPS device in Linux
 
 + Copy firmware to `/lib/firmware/gobi`
 
-+ Modify /lib/udev/rules.d/60-gobi_loader.rules. 
++ Modify /lib/udev/rules.d/60-gobi_loader.rules as follows:
 
 Replace existing line:
 
